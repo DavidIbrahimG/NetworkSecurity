@@ -1,0 +1,23 @@
+import os
+import sys
+from networksecurity.components.data_ingestion import DataIngestion
+from networksecurity.exception.exception import NetworkSecurityException
+from networksecurity.logging.logger import logging
+from networksecurity.entity.config_entity import DataIngestionConfig, TrainingPipelineConfig
+from networksecurity.entity.artifact_entity import DataIngestionArtifact
+from datetime import datetime
+
+
+if __name__=='__main__':
+    try:
+        trainingpipelineconfig=TrainingPipelineConfig()
+        dataingestionconfig=DataIngestionConfig(trainingpipelineconfig)
+        data_ingestion=DataIngestion(dataingestionconfig)
+        logging.info("Initiate the Data Ingestion Process")
+
+        dataingestionartifact=data_ingestion.initiate_data_ingestion()
+        print(dataingestionartifact)
+    except Exception as e:
+        raise NetworkSecurityException(e,sys)
+
+
