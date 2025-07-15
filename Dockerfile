@@ -1,23 +1,23 @@
-# Use a slim Python 3.10 base image
 FROM python:3.10-slim-buster
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy all application files to the container
+# Copy all the application files into the container
 COPY . /app
 
-# Install system dependencies (curl, unzip, awscli)
+# Install system dependencies, including AWS CLI
 RUN apt-get update -y && apt-get install -y \
+    awscli \
     curl \
     unzip \
-    awscli
+    && rm -rf /var/lib/apt/lists/*  # Clean up apt cache to reduce image size
 
 # Install Python dependencies from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port 8000 for FastAPI app
+# Expose the application port (useful for FastAPI or Flask)
 EXPOSE 8000
 
-# Set the default command to run the application
+# Command to run the application
 CMD ["python3", "app.py"]
