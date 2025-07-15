@@ -44,4 +44,13 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1.1.0  # Updated version
+        uses: aws-actions/amazon-ecr-login@v1.1.0  # Corrected version
+
+      - name: Build Docker Image
+        run: |
+          ## build a docker container 
+          ## push it to AWS ECR so it can be deployed to EC2
+          
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
